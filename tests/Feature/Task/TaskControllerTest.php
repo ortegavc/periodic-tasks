@@ -5,6 +5,7 @@ namespace Tests\Feature\Task;
 use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use SebastianBergmann\Type\VoidType;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
@@ -70,6 +71,30 @@ class TaskControllerTest extends TestCase
 
         $period = CarbonPeriod::between($startDate, $endDatte)
             ->filter(fn($date) => $date->isMonday());
+
+        foreach ($period as $date) {
+            $this->assertDatabaseHas('tasks', [
+                'due_date' => $date->format('Y-m-d'),
+            ]);
+        }
+
+    }
+
+    public function test_create_tasks_every_5th_of_each_month(): void
+    {
+        $startDate = now();
+        $endDate = now()->lastOfYear();
+
+        $this->post('tasks', [
+            'title' => fake()->word(),
+            'description' => fake()->text(),
+            'period' => 'monthly',
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ]);
+
+        $startDate->day(5);  // this one do the magic in order to calc the 5th of each month
+        $period = CarbonPeriod::create($startDate, '1 month', $endDate)->filter(fn($date) => $date->isFuture());
 
         foreach ($period as $date) {
             $this->assertDatabaseHas('tasks', [
