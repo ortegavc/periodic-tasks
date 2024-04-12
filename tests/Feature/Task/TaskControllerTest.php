@@ -6,7 +6,6 @@ use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use SebastianBergmann\Type\VoidType;
-use SebastianBergmann\Type\VoidType;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
@@ -44,14 +43,14 @@ class TaskControllerTest extends TestCase
     {
         $title = fake()->word();
         $startDate = now();
-        $endDatte = now()->addDays(7);
+        $endDate = now()->addDays(7);
 
         $this->post('tasks', [
             'title' => $title,
             'description' => fake()->text(),
             'period' => 'daily',
             'start_date' => $startDate,
-            'end_date' => $endDatte,
+            'end_date' => $endDate,
         ]);
 
         $this->assertDatabaseCount('tasks', 8);
@@ -60,17 +59,17 @@ class TaskControllerTest extends TestCase
     public function test_create_tasks_every_monday(): void
     {
         $startDate = now();
-        $endDatte = now()->addMonth();
+        $endDate = now()->addMonth();
 
         $this->post('tasks', [
             'title' => fake()->word(),
             'description' => fake()->text(),
             'period' => 'monday',
             'start_date' => $startDate,
-            'end_date' => $endDatte,
+            'end_date' => $endDate,
         ]);
 
-        $period = CarbonPeriod::between($startDate, $endDatte)
+        $period = CarbonPeriod::between($startDate, $endDate)
             ->filter(fn($date) => $date->isMonday());
 
         foreach ($period as $date) {
