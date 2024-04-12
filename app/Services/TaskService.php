@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Models\Task;
+use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
 class TaskService
@@ -12,8 +13,10 @@ class TaskService
     {
         $period = $request->safe()['period'];
         if (in_array($period, ['daily', 'monday', 'wednesday', 'friday'])) {
-            $this->createDaily($request->safe()->only(['start_date', 'end_date', 'title', 'description', 'period']));
-        } elseif($period == 'once') {
+            $this->createDaily($request->validated());
+        } elseif ($period == 'monthly') {
+            $this->createMonthly($request->validated());
+        } elseif ($period == 'once') {
             Task::create($request->safe()->only(['title', 'description', 'due_date']));
         }
     }
@@ -34,12 +37,30 @@ class TaskService
                 break;
         }
 
+        return Task::insert($this->getTasksArray($series, $validated));
+    }
+
+    private function createMonthly(array $validated): bool
+    {
+        $startDate = Carbon::parse($validated['start_date']);
+        $startDate->day(5);
+        $series = CarbonPeriod::create($startDate, '1 month', $validated['end_date'])->filter(fn($date) => $date->isFuture());
+        return Task::insert($this->getTasksArray($series, $validated));
+    }
+
+    private function getTasksArray($series, $validated): array
+    {
         $tasks = [];
         foreach ($series as $date) {
-            $tasks[] = ['title' => $validated['title'], 'description' => $validated['description'], 'due_date' => $date, 'created_at' => now(), 'updated_at' => now()];
+            $tasks[] = [
+                'title' => $validated['title'],
+                'description' => $validated['description'],
+                'due_date' => $date,
+                'created_at' => now(),
+                'updated_at' => now(),  // it's neccessary set timestamps values manually since query builder 'insert' left them as null.
+            ];
         }
-
-        return Task::insert($tasks);
+        return $tasks;
     }
 
 }
