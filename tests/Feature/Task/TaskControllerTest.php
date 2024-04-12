@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Task;
 
+use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -52,5 +53,29 @@ class TaskControllerTest extends TestCase
         ]);
 
         $this->assertDatabaseCount('tasks', 8);
+    }
+
+    public function test_create_tasks_every_monday(): void
+    {
+        $startDate = now();
+        $endDatte = now()->addMonth();
+
+        $this->post('tasks', [
+            'title' => fake()->word(),
+            'description' => fake()->text(),
+            'period' => 'monday',
+            'start_date' => $startDate,
+            'end_date' => $endDatte,
+        ]);
+
+        $period = CarbonPeriod::between($startDate, $endDatte)
+            ->filter(fn($date) => $date->isMonday());
+
+        foreach ($period as $date) {
+            $this->assertDatabaseHas('tasks', [
+                'due_date' => $date->format('Y-m-d'),
+            ]);
+        }
+
     }
 }

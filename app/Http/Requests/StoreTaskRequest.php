@@ -24,7 +24,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'sometimes|required',
-            'period' => 'required|in:daily,once',
+            'period' => 'required|in:daily,once,monday,wednesday,friday',
             'due_date' => 'requiredIf:period,once|date',
             'start_date' => 'sometimes|required|date',
             'end_date' => 'required_with:start_date|date',
