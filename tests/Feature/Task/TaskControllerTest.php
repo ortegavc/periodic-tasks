@@ -6,6 +6,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use SebastianBergmann\Type\VoidType;
+use SebastianBergmann\Type\VoidType;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
