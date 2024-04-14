@@ -28,3 +28,22 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+  function markTaskDone(taskId) {
+    axios.patch(`tasks/${taskId}`, { taskId: taskId, completed: true })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
+  // Initialize Alpine.js
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('markTaskDone', taskId => {
+      markTaskDone(taskId);
+    });
+  });
+</script>

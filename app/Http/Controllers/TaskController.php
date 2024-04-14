@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TaskPeriod;
-use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\{StoreTaskRequest, UpdateTaskRequest};
 use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
@@ -15,12 +15,14 @@ class TaskController extends Controller
      */
     public function index()
     {
+        // Get pending tasks and needed fields only
         $pending_tasks = Task::where('completed', false)->orderBy('due_date')->get(['id', 'title', 'description', 'due_date']);
+        // All dates in laravel are parsed to Carbon objects
         $today = $pending_tasks->where('due_date', now()->format('Y-m-d'));
         $tomorrow = $pending_tasks->where('due_date', now()->addDay()->format('Y-m-d'));
         $nextWeek = $pending_tasks->whereBetween('due_date', [now()->nextWeekday()->subDay(), now()->nextWeekendDay()]);
         $nearFuture = $pending_tasks->whereBetween('due_date', [now()->nextWeekendDay(), now()->nextWeekendDay()->addDays(7)]);
-        $farFuture =  $pending_tasks->where('due_date', '>', now()->nextWeekendDay()->addDays(7));
+        $farFuture = $pending_tasks->where('due_date', '>', now()->nextWeekendDay()->addDays(7));
         return view('tasks/index', compact('today', 'tomorrow', 'nextWeek', 'nearFuture', 'farFuture'));
     }
 
@@ -61,9 +63,11 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task, TaskService $service)
     {
-        //
+        $service->update($request, $task);
+        $task->fresh();
+        return response()->json($task, 202);
     }
 
     /**

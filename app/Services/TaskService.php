@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\{StoreTaskRequest, UpdateTaskRequest};
 use App\Models\Task;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -18,6 +18,14 @@ class TaskService
             $this->createMonthly($request->validated());
         } elseif ($period == 'once') {
             Task::create($request->safe()->only(['title', 'description', 'due_date']));
+        }
+    }
+
+    public function update(UpdateTaskRequest $request, Task $task): void
+    {
+        if($request->has('completed')) {
+            $task->completed = true;
+            $task->save();
         }
     }
 
