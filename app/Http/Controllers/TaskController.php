@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TaskPeriod;
 use App\Http\Requests\StoreTaskRequest;
 use App\Models\Task;
 use App\Services\TaskService;
@@ -22,7 +23,8 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('tasks/create');
+        $periods = TaskPeriod::valueDescription();
+        return view('tasks/create', compact('periods'));
     }
 
     /**

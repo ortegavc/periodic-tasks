@@ -36,10 +36,11 @@
                             </div>
 
                             <div>
-                                <x-input-label for="period" :value="__('Period')" />
+                                <x-input-label for="period" :value="__('Repeat')" />
                                 <select x-model="period" name="period" id="period" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    <option value="once">once</option>
-                                    <option value="daily">daily</option>
+                                    @foreach ($periods as $value => $text)
+                                        <option value="{{ $value }}">{{ $text }}</option>
+                                    @endforeach
                                 </select>
                                 <x-input-error class="mt-2" :messages="$errors->get('period')" />
                             </div>
@@ -53,7 +54,7 @@
                             </template>
 
                             <template x-if="period != 'once'">
-                                <div class="flex">
+                                <div class="flex gap-4">
                                     <div class="w-full">
                                         <x-input-label for="start_date" :value="__('Start date')" />
                                         <x-date-input id="start_date" name="start_date" type="text" class="mt-1 block w-full" :value="old('start_date')" autofocus autocomplete="start_date" />
