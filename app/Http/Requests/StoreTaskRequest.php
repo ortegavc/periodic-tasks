@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TaskPeriod;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -24,7 +26,7 @@ class StoreTaskRequest extends FormRequest
         return [
             'title' => 'required',
             'description' => 'sometimes|required',
-            'period' => 'required|in:daily,monthly,once,monday,wednesday,friday',
+            'period' => ['required', Rule::enum(TaskPeriod::class)],
             'due_date' => 'requiredIf:period,once|date',
             'start_date' => 'sometimes|required|date',
             'end_date' => 'required_with:start_date|date',
