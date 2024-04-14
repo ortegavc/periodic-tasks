@@ -13,12 +13,12 @@
         </button>
     </div>
     <!-- Accordion Content (hidden by default) -->
-    <div x-show="open" class="p-4" x-data="{ tasks: {{ $tasks->toJson() }} }">
+    <div x-show="open" class="p-4 text-sm text-gray-600" x-data="{ tasks: {{ $tasks->toJson() }} }">
         <ul>
             <template x-for="(task, index) in tasks" :key="task.id">
                 <li>
                     <input type="checkbox" x-model="task.completed" @click="markTaskDone(task.id)">
-                    <span x-text="task.title"></span>
+                    <span x-text="task.due_date" class=""></span>: <span x-text="task.title"></span>
                 </li>
             </template>
         </ul>
