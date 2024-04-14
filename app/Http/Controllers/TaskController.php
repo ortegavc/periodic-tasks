@@ -14,7 +14,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return 'Hello from TaskController@index';
+        return view('tasks/index');
     }
 
     /**
@@ -22,7 +22,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks/create');
     }
 
     /**

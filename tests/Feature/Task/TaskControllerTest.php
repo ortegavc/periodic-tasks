@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Task;
 
+use App\Models\User;
 use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,15 +18,17 @@ class TaskControllerTest extends TestCase
      */
     public function test_tasks_index_can_be_rendered(): void
     {
-        $response = $this->get('/tasks');
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->get('/tasks');
 
         $response->assertStatus(200);
     }
 
     public function test_create_task_once(): void
     {
+        $user = User::factory()->create();
         $title = fake()->word();
-        $response = $this->post('tasks', [
+        $response = $this->actingAs($user)->post('tasks', [
             'title' => $title,
             'description' => fake()->text(),
             'due_date' => now(),
@@ -41,11 +44,12 @@ class TaskControllerTest extends TestCase
 
     public function test_create_tasks_every_day(): void
     {
+        $user = User::factory()->create();
         $title = fake()->word();
         $startDate = now();
         $endDate = now()->addDays(7);
 
-        $this->post('tasks', [
+        $this->actingAs($user)->post('tasks', [
             'title' => $title,
             'description' => fake()->text(),
             'period' => 'daily',
@@ -58,10 +62,11 @@ class TaskControllerTest extends TestCase
 
     public function test_create_tasks_every_monday(): void
     {
+        $user = User::factory()->create();
         $startDate = now();
         $endDate = now()->addMonth();
 
-        $this->post('tasks', [
+        $this->actingAs($user)->post('tasks', [
             'title' => fake()->word(),
             'description' => fake()->text(),
             'period' => 'monday',
@@ -82,10 +87,11 @@ class TaskControllerTest extends TestCase
 
     public function test_create_tasks_every_5th_of_each_month(): void
     {
+        $user = User::factory()->create();
         $startDate = now();
         $endDate = now()->lastOfYear();
 
-        $this->post('tasks', [
+        $this->actingAs($user)->post('tasks', [
             'title' => fake()->word(),
             'description' => fake()->text(),
             'period' => 'monthly',
