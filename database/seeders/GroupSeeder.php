@@ -18,6 +18,8 @@ class GroupSeeder extends Seeder
             ['name' => 'Feature', 'description' => 'Used for work on new features.', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Hotfix', 'description' => 'Used for fixing urgent bugs on production that have high impact.', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Release', 'description' => 'Used for preparing and testing your work for release.', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Meeting', 'description' => 'SCRUM daily meeting', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Solution Desing', 'description' => 'Start investigating the feature (no coding).', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }
