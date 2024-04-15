@@ -1,5 +1,7 @@
 <p align="center"><a href="#" target="_blank"><img src="https://www.svgrepo.com/show/376121/list-task.svg" width="200" alt="Tasks Logo"></a></p>
 
+# PeriodicTasks
+
 ## About
 
 PeriodicTasks is a Laravel web application that allows you to create and manage periodic tasks. Users can set the frequency and duration of tasks, as well as group them into task groups. The application displays pending tasks in a list arranged by date, and users can mark a task as complete.
