@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Task;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class StoreTaskRequestTest extends TestCase
@@ -12,14 +12,15 @@ class StoreTaskRequestTest extends TestCase
 
     public function test_task_title_is_required(): void
     {
-        $response = $this->post('tasks');
-
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->post('tasks');
         $response->assertSessionHasErrors(['title']);
     }
 
     public function test_task_dates_must_be_present_and_valid_dates(): void
     {
-        $response = $this->post('tasks', [
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->post('tasks', [
             'title' => fake()->word(),
             'due_date' => '',  // The due date field must have a value when present.
             'start_date' => '2024',  // The start date field must be a valid date.
