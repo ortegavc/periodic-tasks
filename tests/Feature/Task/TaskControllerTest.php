@@ -5,8 +5,6 @@ namespace Tests\Feature\Task;
 use App\Models\User;
 use Carbon\CarbonPeriod;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use SebastianBergmann\Type\VoidType;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
@@ -31,7 +29,7 @@ class TaskControllerTest extends TestCase
         $response = $this->actingAs($user)->post('tasks', [
             'title' => $title,
             'description' => fake()->text(),
-            'due_date' => now(),
+            'due_date' => now()->format('Y-m-d'),
             'period' => 'once',
         ]);
 
@@ -53,8 +51,8 @@ class TaskControllerTest extends TestCase
             'title' => $title,
             'description' => fake()->text(),
             'period' => 'daily',
-            'start_date' => $startDate,
-            'end_date' => $endDate,
+            'start_date' => $startDate->format('Y-m-d'),
+            'end_date' => $endDate->format('Y-m-d'),
         ]);
 
         $this->assertDatabaseCount('tasks', 8);
@@ -70,8 +68,8 @@ class TaskControllerTest extends TestCase
             'title' => fake()->word(),
             'description' => fake()->text(),
             'period' => 'monday',
-            'start_date' => $startDate,
-            'end_date' => $endDate,
+            'start_date' => $startDate->format('Y-m-d'),
+            'end_date' => $endDate->format('Y-m-d'),
         ]);
 
         $period = CarbonPeriod::between($startDate, $endDate)
@@ -95,8 +93,8 @@ class TaskControllerTest extends TestCase
             'title' => fake()->word(),
             'description' => fake()->text(),
             'period' => 'monthly',
-            'start_date' => $startDate,
-            'end_date' => $endDate,
+            'start_date' => $startDate->format('Y-m-d'),
+            'end_date' => $endDate->format('Y-m-d'),
         ]);
 
         $startDate->day(5);  // this one do the magic in order to calc the 5th of each month

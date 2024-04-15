@@ -9,21 +9,21 @@ use Carbon\CarbonPeriod;
 
 class TaskService
 {
-    public function store(StoreTaskRequest $request): void
+    public function store(StoreTaskRequest $request, int $user_id): void
     {
         $period = $request->safe()['period'];
         if (in_array($period, ['daily', 'monday', 'wednesday', 'friday'])) {
-            $this->createDaily($request->validated());
+            $this->createDaily($request->validated() + ['user_id' => $user_id]);
         } elseif ($period == 'monthly') {
-            $this->createMonthly($request->validated());
+            $this->createMonthly($request->validated() + ['user_id' => $user_id]);
         } elseif ($period == 'once') {
-            Task::create($request->safe()->only(['title', 'description', 'due_date', 'group_id']));
+            Task::create(($request->validated() + ['user_id' => $user_id]));
         }
     }
 
     public function update(UpdateTaskRequest $request, Task $task): void
     {
-        if($request->has('completed')) {
+        if ($request->has('completed')) {
             $task->completed = true;
             $task->save();
         }
@@ -63,8 +63,9 @@ class TaskService
             $tasks[] = [
                 'title' => $validated['title'],
                 'description' => $validated['description'],
-                'due_date' => $date,
-                'group_id' => $validated['group_id'],
+                'due_date' => $date->format('Y-m-d'),
+                'group_id' => $validated['group_id'] ?? null,
+                'user_id' => $validated['user_id'],
                 'created_at' => now(),
                 'updated_at' => now(),  // it's neccessary set timestamps values manually since query builder 'insert' left them as null.
             ];

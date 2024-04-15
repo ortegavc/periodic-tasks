@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('group_id')->references('id')->on('groups');
+            $table->foreignId('user_id')->constrained();
         });
     }
 

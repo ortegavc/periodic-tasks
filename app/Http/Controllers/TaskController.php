@@ -6,7 +6,7 @@ use App\Enums\TaskPeriod;
 use App\Http\Requests\{StoreTaskRequest, UpdateTaskRequest};
 use App\Models\{Group, Task};
 use App\Services\TaskService;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -42,7 +42,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request, TaskService $service)
     {
-        $service->store($request);
+        $service->store($request, Auth::id());
         return redirect()->route('tasks.index');
     }
 
