@@ -30,6 +30,7 @@ class StoreTaskRequest extends FormRequest
             'due_date' => 'requiredIf:period,once|date',
             'start_date' => 'sometimes|required|date',
             'end_date' => 'required_with:start_date|date',
+            'group_id' => 'nullable|exists:App\Models\Group,id',
         ];
     }
 }

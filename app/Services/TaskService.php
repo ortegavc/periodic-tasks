@@ -17,7 +17,7 @@ class TaskService
         } elseif ($period == 'monthly') {
             $this->createMonthly($request->validated());
         } elseif ($period == 'once') {
-            Task::create($request->safe()->only(['title', 'description', 'due_date']));
+            Task::create($request->safe()->only(['title', 'description', 'due_date', 'group_id']));
         }
     }
 
@@ -64,6 +64,7 @@ class TaskService
                 'title' => $validated['title'],
                 'description' => $validated['description'],
                 'due_date' => $date,
+                'group_id' => $validated['group_id'],
                 'created_at' => now(),
                 'updated_at' => now(),  // it's neccessary set timestamps values manually since query builder 'insert' left them as null.
             ];

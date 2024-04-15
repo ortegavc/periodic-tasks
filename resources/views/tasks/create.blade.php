@@ -35,14 +35,26 @@
                                 <x-input-error class="mt-2" :messages="$errors->get('description')" />
                             </div>
 
-                            <div>
-                                <x-input-label for="period" :value="__('Repeat')" />
-                                <select x-model="period" name="period" id="period" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    @foreach ($periods as $value => $text)
-                                        <option value="{{ $value }}">{{ $text }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error class="mt-2" :messages="$errors->get('period')" />
+                            <div class="flex gap-4">
+                                <div class="w-full">
+                                    <x-input-label for="group" :value="__('Group')" />
+                                    <select x-model="group" name="group_id" id="group" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                        <option value="">No group</option>
+                                        @foreach ($groups as $group)
+                                            <option value="{{ $group->id }}">{{ $group->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <x-input-error class="mt-2" :messages="$errors->get('group')" />
+                                </div>
+                                <div class="w-full">
+                                    <x-input-label for="period" :value="__('Repeat')" />
+                                    <select x-model="period" name="period" id="period" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                        @foreach ($periods as $value => $text)
+                                            <option value="{{ $value }}">{{ $text }}</option>
+                                        @endforeach
+                                    </select>
+                                    <x-input-error class="mt-2" :messages="$errors->get('period')" />
+                                </div>
                             </div>
 
                             <template x-if="period == 'once'">

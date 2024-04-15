@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TaskPeriod;
 use App\Http\Requests\{StoreTaskRequest, UpdateTaskRequest};
-use App\Models\Task;
+use App\Models\{Group, Task};
 use App\Services\TaskService;
 use Illuminate\Http\Request;
 
@@ -32,7 +32,8 @@ class TaskController extends Controller
     public function create()
     {
         $periods = TaskPeriod::valueDescription();
-        return view('tasks/create', compact('periods'));
+        $groups = Group::all();
+        return view('tasks/create', compact('groups', 'periods'));
     }
 
     /**
