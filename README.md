@@ -1,66 +1,71 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="#" target="_blank"><img src="https://www.svgrepo.com/show/376121/list-task.svg" width="200" alt="Tasks Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## About
 
-## About Laravel
+PeriodicTasks is a Laravel web application that allows you to create and manage periodic tasks. Users can set the frequency and duration of tasks, as well as group them into task groups. The application displays pending tasks in a list arranged by date, and users can mark a task as complete.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A detailed description of the features is provided below:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Creation of periodic tasks: any user can create periodic tasks (once, every day, every Monday, Wednesday and Friday, every 5th of each month).
+2. Task grouping: Users are able to group tasks into task groups.
+3. Task listing: The application display a list of pending tasks, organized by date. Pending tasks are grouped into "Tasks Today", "Tasks Tomorrow", "Tasks Next Week", "Tasks in the Near Future", "Tasks in the Future", and "Tasks Overdue". Users are able to mark a task as completed.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Techincal features
+This application was built using some development principles like SOLID, DRY, and the following Laravel Framework features:
+- **Route Middleware**: in order to allow only authenticated users access to the tasks management, check the [Web Routes](https://github.com/ortegavc/periodic-tasks/blob/main/routes/web.php#L31).
+- **Route Model Binding**: Laravel route model binding provides a convenient way to automatically inject the model instances directly into your routes. Check out the methods on [TaskController](https://github.com/ortegavc/periodic-tasks/blob/main/app/Http/Controllers/TaskController.php).
+- **Dependency Injection**: a good way to keep our controller clean is putting the business logic into services, this is demonstrated on [TaskService](https://github.com/ortegavc/periodic-tasks/blob/main/app/Services/TaskService.php) which is injected in store and update methods on [TaskController](https://github.com/ortegavc/periodic-tasks/blob/main/app/Http/Controllers/TaskController.php).
+- **Form Request Validation**: another good way to keep our controllers clean is moving the backend validation logic into [Form Requests](https://laravel.com/docs/10.x/validation#form-request-validation), stop by [StoreTaskRequest](https://github.com/ortegavc/periodic-tasks/blob/main/app/Http/Requests/StoreTaskRequest.php) to see this in action, furthermore, you'll find some interesting validation rules.
+- **Migrations**: as you may be aware, migrations function similarly to database version control. But there is something I'd like to mention, often we don't mind about DB size, check out the migration for the [Group table](https://github.com/ortegavc/periodic-tasks/blob/main/database/migrations/2024_04_10_144513_create_groups_table.php#L15), since this entity is not expected to have tons of records, it uses a tiny integer field type for the id. Then check out how to reference its foreign key from [Tasks table](https://github.com/ortegavc/periodic-tasks/blob/main/database/migrations/2024_04_10_144521_create_tasks_table.php#L20) migration.
+- **Seeders**: [GroupSeeder](https://github.com/ortegavc/periodic-tasks/blob/main/database/seeders/GroupSeeder.php) has some default data to avoid insert this by hand.
+- **Blade components**: in order to avoid duplicating code when rendering tasks groups I decided to create the [accordion-item](https://github.com/ortegavc/periodic-tasks/blob/main/resources/views/components/accordion-item.blade.php) component, give a shout to this DRY example in action.
+- **PHP Carbon**: when it comes to work with dates, this is the [#1 Lib](https://carbon.nesbot.com/), that's why it comes out of the box with Laravel. Just look at the [TaskService](https://github.com/ortegavc/periodic-tasks/blob/main/app/Services/TaskService.php) and how it reduce the complexity on working with dates.
+- **PHP Enums**: a new feature that arrived in PHP 8.1, and I decided to take adavantage when working with the different [Tasks Periods](https://github.com/ortegavc/periodic-tasks/blob/main/app/Enums/TaskPeriod.php).
+- **Feature Tests**: the only way to be sure that our apps will work for long time, check the [TaskControllerTest](https://github.com/ortegavc/periodic-tasks/blob/main/tests/Feature/Task/TaskControllerTest.php) and some fancy use cases tested.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
+## Setup for development
+### Prerequisites
+- PHP 8.1+
+- Composer
+- MySQL
+### Installation
+**Create the database**
+```sh
+> mysql -u root
+> CREATE DATABASE `ptasks` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+**Clone the repo**
+```sh
+> git clone https://github.com/ortegavc/periodic-tasks.git
+```
+**Install Laravel dependencies**
+```sh
+> composer install
+```
+**Config the .env file**
+```sh
+> cd periodic-tasks
+> cp .env.example .env
+> php artisan key:generate
+```
+Open the .env file from your prefered text editor, and set the values for next params:
+- DB_CONNECTION=mysql
+- DB_HOST=127.0.0.1
+- DB_PORT=3306
+- DB_DATABASE=ptasks
+- DB_USERNAME=root
+- DB_PASSWORD=
+**Run migrations and seed**
+```sh
+> php artisan migrate --seed
+```
+**Run application**
+```sh
+> php artisan serve
+```
+Go to [http://127.0.0.1:8000](http://127.0.0.1:8000) from your browser, and register your user before login 🚀.
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
+
+**Free Software, Hell Yeah!**
