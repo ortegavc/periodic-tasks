@@ -57,6 +57,7 @@ Open the .env file from your prefered text editor, and set the values for next p
 - DB_DATABASE=ptasks
 - DB_USERNAME=root
 - DB_PASSWORD=
+
 **Run migrations and seed**
 ```sh
 > php artisan migrate --seed
