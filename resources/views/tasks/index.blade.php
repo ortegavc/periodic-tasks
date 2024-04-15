@@ -23,6 +23,9 @@
 
                     <!-- Accordion Item 5 -->
                     <x-accordion-item title="Tasks Far Future" :tasks="$farFuture"/>
+
+                    <!-- Accordion Item 6 -->
+                    <x-accordion-item title="Overdue Tasks" :tasks="$overdue"/>
                 </div>
             </div>
         </div>
